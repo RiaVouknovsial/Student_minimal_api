@@ -1,10 +1,14 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddEndpointsApiExplorer();     //добавляем в ручном режиме
+builder.Services.AddSwaggerGen();               //добавляем в ручном режиме
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();       //добавляем в ручном режиме
+app.UseSwaggerUI();     //добавляем в ручном режиме
 
 //app.UseHttpsRedirection();
 var students = new List<StudentModel>();
