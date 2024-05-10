@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Student_minimal_api.Auth;
+using Student_minimal_api.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 var app = builder.Build();
+
+app.UseMiddleware<HeaderValidationMiddleware>();
 
 //добавляем использование ауторизации и идентификации
 app.UseAuthentication();
