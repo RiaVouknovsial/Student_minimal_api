@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Student_minimal_api.Auth;
+using Student_minimal_api.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,8 +31,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddTransient<GetRequestLoggingMiddleware>();
+builder.Services.AddTransient<PostRequestLoggingMiddleware>();
+builder.Services.AddTransient<RequestLoggingMiddleware>();
+
 
 var app = builder.Build();
+
+//app.UseRequestLogging_1();
+//app.UseRequestLogging_2();
+//app.UseRequestLogging_3();
+app.UseMiddleware<HeaderValidationMiddleware>();
+//app.UseMiddleware<GetRequestLoggingMiddleware>();
+//app.UseMiddleware<PostRequestLoggingMiddleware>();
+//app.UseMiddleware<RequestLoggingMiddleware>();
 
 //добавляем использование ауторизации и идентификации
 app.UseAuthentication();
@@ -41,6 +54,11 @@ app.UseAuthorization();
 // Configure the HTTP request pipeline.
 app.UseSwagger();       //добавляем в ручном режиме
 app.UseSwaggerUI();     //добавляем в ручном режиме
+//app.UseSwaggerUI(c =>
+//{
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//    c.RoutePrefix = "swagger"; // Это уберет добавление /index.html в URL
+//});
 
 //для возврата токенап
 app.MapGet("/login", [AllowAnonymous] async (HttpContext context,
