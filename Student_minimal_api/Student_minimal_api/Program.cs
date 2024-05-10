@@ -31,10 +31,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddTransient<GetRequestLoggingMiddleware>();
+builder.Services.AddTransient<PostRequestLoggingMiddleware>();
+builder.Services.AddTransient<RequestLoggingMiddleware>();
+
 
 var app = builder.Build();
 
-app.UseMiddleware<HeaderValidationMiddleware>();
+//app.UseMiddleware<CustomMiddleware>();
+//app.UseMiddleware<RequestLoggingMiddleware>(); // 1 вариант
+//app.UseRequestLogging();            // 2 вариант с Extensions
+app.UseRequestLogging_1();
+app.UseRequestLogging_2();
+app.UseRequestLogging_3();
+//app.UseMiddleware<HeaderValidationMiddleware>();
+app.UseMiddleware<GetRequestLoggingMiddleware>();
+app.UseMiddleware<PostRequestLoggingMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 //добавляем использование ауторизации и идентификации
 app.UseAuthentication();
